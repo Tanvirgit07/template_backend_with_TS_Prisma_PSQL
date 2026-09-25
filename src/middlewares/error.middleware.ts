@@ -76,7 +76,7 @@ const errorMiddleware: ErrorRequestHandler = (
   }
 
   if (statusCode >= 500) {
-  // console.error("🔴 PRISMA REAL ERROR:", err);
+  console.error("🔴 PRISMA REAL ERROR:", err);
     logger.error("Unhandled request error", { errorType: err instanceof Error ? err.name : "UnknownError" });
   }
 

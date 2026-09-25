@@ -20,6 +20,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "@prisma/adapter-neon": "^7.10.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "bcrypt": "^6.0.0",
@@ -28,12 +30,14 @@
     "dotenv": "^18.0.1",
     "express": "^5.2.1",
     "multer": "^2.4.0",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "ws": "^8.21.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/multer": "^2.2.0",
     "@types/node": "^26.6.2",
+    "@types/ws": "^8.18.1",
     "prisma": "^7.10.0",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
