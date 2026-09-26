@@ -5,14 +5,20 @@ export const parseEnv = (source: NodeJS.ProcessEnv) => {
   if (!databaseUrl) throw new Error("DATABASE_URL is required");
   try {
     const url = new URL(databaseUrl);
-    if (!["postgres:", "postgresql:"].includes(url.protocol) || !url.hostname) throw new Error();
+    if (!["postgres:", "postgresql:"].includes(url.protocol) || !url.hostname)
+      throw new Error();
   } catch {
     throw new Error("DATABASE_URL must be a valid PostgreSQL URL");
   }
 
   const portText = source.PORT ?? "5000";
   const port = Number(portText);
-  if (!/^\d+$/.test(portText) || !Number.isInteger(port) || port < 1 || port > 65535) {
+  if (
+    !/^\d+$/.test(portText) ||
+    !Number.isInteger(port) ||
+    port < 1 ||
+    port > 65535
+  ) {
     throw new Error("PORT must be an integer between 1 and 65535");
   }
   const nodeEnv = source.NODE_ENV ?? "development";
@@ -26,9 +32,26 @@ export const parseEnv = (source: NodeJS.ProcessEnv) => {
   };
   const configured = Object.values(cloud).filter(Boolean).length;
   if (configured !== 0 && configured !== 3) {
-    throw new Error("Set all three CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET variables, or omit all three");
+    throw new Error(
+      "Set all three CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET variables, or omit all three",
+    );
   }
-  return { port, nodeEnv, databaseUrl, cloudinary: cloud };
+  const accessSecret = source.JWT_ACCESS_SECRET?.trim() || "default_jwt_secret";
+  const accessExpiresIn = source.JWT_ACCESS_EXPIRES_IN?.trim() || "1d";
+
+  const jwt = {
+    accessSecret,
+    accessExpiresIn,
+  };
+
+  return {
+    port,
+    nodeEnv,
+    databaseUrl,
+    cloudinary: cloud,
+    accessSecret,
+    jwt,
+  };
 };
 
 export const env = parseEnv(process.env);
